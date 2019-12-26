@@ -24,12 +24,12 @@ recourseWindow::recourseWindow(DWidget *parent)
 {
     m_verCode = genVerCode();
     initUi();
-    timer = new QTimer(this);
+    m_timer = new QTimer(this);
     // 设置2秒时间等待
-    timer->setInterval(2 * 1000);
-    timer->setSingleShot(false);
-    connect(timer, &QTimer::timeout, this, &recourseWindow::geneVerCodeUi);
-    timer->start();
+    m_timer->setInterval(2 * 1000);
+    m_timer->setSingleShot(false);
+    connect(m_timer, &QTimer::timeout, this, &recourseWindow::geneVerCodeUi);
+    m_timer->start();
 }
 
 recourseWindow::~recourseWindow()
@@ -51,10 +51,10 @@ QString recourseWindow::genVerCode()
 void recourseWindow::initUi()
 {
     this->setWindowFlag(Qt::WindowMaximizeButtonHint, false);
-    centerWindow = new QWidget();
-    setCentralWidget(centerWindow);
+    m_centerWindow = new DWidget();
+    setCentralWidget(m_centerWindow);
 
-    QWidget *titleWidget = new QWidget();
+    DWidget *titleWidget = new DWidget();
     DLabel *titleBarIcon = new DLabel(titleWidget);
     titleBarIcon->setFixedSize(28, 28);
     titleBarIcon->setPixmap(DHiDPIHelper::loadNxPixmap(":/images/handSec.png").scaled(titleBarIcon->width(),
@@ -78,20 +78,20 @@ void recourseWindow::initUi()
     titlebar()->setCustomWidget(titleWidget);
     titlebar()->setStyleSheet("background-color: #F5F5F8;");
 
-    auto spinner = new DSpinner;
+    DSpinner *spinner = new DSpinner;
     spinner->start();
     spinner->setFixedSize(QSize(50, 50));
 
-    tipLabel = new DLabel(this);
-    tipLabel->setText("正在生成验证码，请稍后...");
+    m_tipLabel = new DLabel(this);
+    m_tipLabel->setText("正在生成验证码，请稍后...");
     QFont font("Courier", 10);
-    tipLabel->setFont(font);
+    m_tipLabel->setFont(font);
 
-    cancelButton = new DSuggestButton(this);
-    cancelButton->setText("取消");
-    cancelButton->setFixedSize(QSize(190, 40));
-    connect(cancelButton, &QPushButton::clicked, this, [ = ] {
-        QWidget::close();
+    m_cancelButton = new DSuggestButton(this);
+    m_cancelButton->setText("取消");
+    m_cancelButton->setFixedSize(QSize(190, 40));
+    connect(m_cancelButton, &QPushButton::clicked, this, [ = ] {
+        DWidget::close();
         // 显示父窗体
         parentWidget()->move(x(), y());
         parentWidget()->show();
@@ -106,47 +106,48 @@ void recourseWindow::initUi()
     vlayout->setContentsMargins(0, 30, 0, 30);
     vlayout->setSpacing(15);
     vlayout->addWidget(spinner, 0, Qt::AlignCenter);
-    vlayout->addWidget(tipLabel, 0, Qt::AlignCenter);
-    vlayout->addWidget(cancelButton, 0, Qt::AlignCenter);
-    centerWindow->setLayout(vlayout);
+    vlayout->addWidget(m_tipLabel, 0, Qt::AlignCenter);
+    vlayout->addWidget(m_cancelButton, 0, Qt::AlignCenter);
+    m_centerWindow->setLayout(vlayout);
 }
 
 void recourseWindow::geneVerCodeUi()
 {
-    timer->stop();
+    //this->layout()->removeWidget(m_centerWindow);
+    m_timer->stop();
     this->setWindowFlag(Qt::WindowMaximizeButtonHint, false);
     this->setWindowTitle(QString("我要求助"));
-    centerWindow = new QWidget();
-    setCentralWidget(centerWindow);
-    verificationcode = new DLabel(this);
-    verificationcode->setText(m_verCode);
+    m_centerWindow = new DWidget();
+    setCentralWidget(m_centerWindow);
+    m_verificationcode = new DLabel(this);
+    m_verificationcode->setText(m_verCode);
     QFont vf_font("Courier", 30);
     vf_font.setBold(false);
     vf_font.setWeight(QFont::Light);
     vf_font.setLetterSpacing(QFont::PercentageSpacing, 180);
     vf_font.setBold(false);
-    verificationcode->setFont(vf_font);
+    m_verificationcode->setFont(vf_font);
 
     QHBoxLayout *hVerCodeLayout = new QHBoxLayout();
     hVerCodeLayout->addStretch();
     hVerCodeLayout->addSpacing(30);
-    hVerCodeLayout->addWidget(verificationcode);
+    hVerCodeLayout->addWidget(m_verificationcode);
     hVerCodeLayout->addStretch();
 
-    tipLabel = new DLabel(this);
-    tipLabel->setText("要开始共享您的桌面，请将上述验证码提供给协助您的成员，他们输""\n"
-                      "           入验证码后，您的共享会话会立即开始");
+    m_tipLabel = new DLabel(this);
+    m_tipLabel->setText("要开始共享您的桌面，请将上述验证码提供给协助您的成员，他们输""\n"
+                        "           入验证码后，您的共享会话会立即开始");
     QFont tip_font("Courier", 8);
-    tipLabel->setFixedWidth(320);
-    tipLabel->setFont(tip_font);
+    m_tipLabel->setFixedWidth(320);
+    m_tipLabel->setFont(tip_font);
     QPalette pe;
     pe.setColor(QPalette::WindowText, Qt::gray);
-    tipLabel->setPalette(pe);
+    m_tipLabel->setPalette(pe);
 
-    copyButton = new DSuggestButton(this);
-    copyButton->setBackgroundRole(QPalette::Button);
-    copyButton->setText("复制");
-    copyButton->setFixedSize(QSize(190, 40));
+    m_copyButton = new DSuggestButton(this);
+    m_copyButton->setBackgroundRole(QPalette::Button);
+    m_copyButton->setText("复制");
+    m_copyButton->setFixedSize(QSize(190, 40));
 
     QPalette pal(this->palette());
     pal.setColor(QPalette::Background, QColor("#F5F5F8"));
@@ -157,47 +158,48 @@ void recourseWindow::geneVerCodeUi()
     vlayout->setContentsMargins(0, 30, 0, 30);
     vlayout->setSpacing(15);
     vlayout->addLayout(hVerCodeLayout);
-    vlayout->addWidget(tipLabel, 0, Qt::AlignCenter);
-    vlayout->addWidget(copyButton, 0, Qt::AlignCenter);
-    centerWindow->setLayout(vlayout);
-    connect(copyButton, &QPushButton::clicked, this, &recourseWindow::copyVerCodeUi);
-    connect(copyButton, &QPushButton::clicked, this, &recourseWindow::copyVerCode);
+    vlayout->addWidget(m_tipLabel, 0, Qt::AlignCenter);
+    vlayout->addWidget(m_copyButton, 0, Qt::AlignCenter);
+    m_centerWindow->setLayout(vlayout);
+    connect(m_copyButton, &QPushButton::clicked, this, &recourseWindow::copyVerCodeUi);
+    connect(m_copyButton, &QPushButton::clicked, this, &recourseWindow::copyVerCode);
 }
 
 void recourseWindow::copyVerCodeUi()
 {
+    //this->layout()->removeWidget(m_centerWindow);
     this->setWindowFlag(Qt::WindowMaximizeButtonHint, false);
     this->setWindowTitle(QString("我要求助"));
-    centerWindow = new QWidget();
-    setCentralWidget(centerWindow);
+    m_centerWindow = new DWidget();
+    setCentralWidget(m_centerWindow);
 
-    verificationcode = new DLabel(this);
-    verificationcode->setText("  成功复制到粘贴板");
+    m_verificationcode = new DLabel(this);
+    m_verificationcode->setText("  成功复制到粘贴板");
     QFont vf_font("Courier", 20);
     vf_font.setBold(false);
     vf_font.setWeight(QFont::Light);
     vf_font.setLetterSpacing(QFont::PercentageSpacing, 120);
-    verificationcode->setFont(vf_font);
+    m_verificationcode->setFont(vf_font);
 
     QFont tip_font("Courier", 10);
     QPalette pe;
     pe.setColor(QPalette::WindowText, Qt::gray);
 
     QFont lableFont("Courier", 9);
-    tipLabel = new DLabel(this);
-    tipLabel->setText("           正在等待链接,请稍后...");
-    tipLabel->setPalette(pe);
-    tipLabel->setFont(lableFont);
-    tipLabelSec = new DLabel(this);
-    tipLabelSec->setText("     连接成功后，此界面会自动隐藏到任务栏");
-    tipLabelSec->setPalette(pe);
-    tipLabelSec->setFont(lableFont);
+    m_tipLabel = new DLabel(this);
+    m_tipLabel->setText("           正在等待链接,请稍后...");
+    m_tipLabel->setPalette(pe);
+    m_tipLabel->setFont(lableFont);
+    m_tipLabelSec = new DLabel(this);
+    m_tipLabelSec->setText("     连接成功后，此界面会自动隐藏到任务栏");
+    m_tipLabelSec->setPalette(pe);
+    m_tipLabelSec->setFont(lableFont);
 
     QVBoxLayout *vlayoutInner = new QVBoxLayout();
     vlayoutInner->addStretch();
     vlayoutInner->setSpacing(5);
-    vlayoutInner->addWidget(tipLabel);
-    vlayoutInner->addWidget(tipLabelSec);
+    vlayoutInner->addWidget(m_tipLabel);
+    vlayoutInner->addWidget(m_tipLabelSec);
     vlayoutInner->addStretch();
 
     QHBoxLayout *hlayout = new QHBoxLayout();
@@ -205,12 +207,12 @@ void recourseWindow::copyVerCodeUi()
     hlayout->addLayout(vlayoutInner);
     hlayout->addStretch();
 
-    copyButton = new DSuggestButton(this);
-    copyButton->setBackgroundRole(QPalette::Button);
-    copyButton->setText("返回");
-    copyButton->setFixedSize(QSize(190, 40));
-    connect(copyButton, &QPushButton::clicked, this, [ = ] {
-        QWidget::close();
+    m_copyButton = new DSuggestButton(this);
+    m_copyButton->setBackgroundRole(QPalette::Button);
+    m_copyButton->setText("返回");
+    m_copyButton->setFixedSize(QSize(190, 40));
+    connect(m_copyButton, &QPushButton::clicked, this, [ = ] {
+        DWidget::close();
         // 显示父窗体
         parentWidget()->show();
     });
@@ -218,19 +220,19 @@ void recourseWindow::copyVerCodeUi()
     QHBoxLayout *hButtonLayout = new QHBoxLayout();
     hButtonLayout->addStretch();
     hButtonLayout->addSpacing(35);
-    hButtonLayout->addWidget(copyButton);
+    hButtonLayout->addWidget(m_copyButton);
     hButtonLayout->addStretch();
 
     QVBoxLayout *vlayout = new QVBoxLayout(this);
     vlayout->addStretch();
     vlayout->setContentsMargins(0, 30, 0, 0);
     vlayout->setSpacing(30);
-    vlayout->addWidget(verificationcode, 0, Qt::AlignCenter | Qt::AlignCenter);
+    vlayout->addWidget(m_verificationcode, 0, Qt::AlignCenter | Qt::AlignCenter);
     vlayout->addLayout(hlayout);
     vlayout->addLayout(hButtonLayout);
     vlayout->setContentsMargins(0, 0, 30, 0);
     vlayout->addStretch();
-    centerWindow->setLayout(vlayout);
+    m_centerWindow->setLayout(vlayout);
 }
 
 void recourseWindow::copyVerCode()

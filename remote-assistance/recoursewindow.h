@@ -15,20 +15,20 @@ class recourseWindow : public DMainWindow
 {
     Q_OBJECT
 public:
-    recourseWindow(QWidget *parent = nullptr);
+    recourseWindow(DWidget *parent = nullptr);
     ~recourseWindow();
     QString genVerCode();
     QString getVerCode() { return m_verCode; }
 
 private:
     void initUi();
-    DLabel *verificationcode;
-    DLabel *tipLabel;
-    DLabel *tipLabelSec;
-    QWidget *centerWindow;
-    DSuggestButton *cancelButton;
-    DPushButton *copyButton;
-    QTimer *timer;
+    DLabel *m_verificationcode;
+    DLabel *m_tipLabel;
+    DLabel *m_tipLabelSec;
+    DWidget *m_centerWindow;
+    DSuggestButton *m_cancelButton;
+    DPushButton *m_copyButton;
+    QTimer *m_timer;
     QString m_verCode;
 
 public slots:

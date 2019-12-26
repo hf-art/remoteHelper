@@ -16,7 +16,7 @@ class assistWindow : public DMainWindow
 {
     Q_OBJECT
 public:
-    assistWindow(QWidget *parent = nullptr);
+    assistWindow(DWidget *parent = nullptr);
     ~assistWindow();
     void setVerCode(QString verCode);
 
@@ -24,12 +24,12 @@ public:
     void changeButtonStateToCancle();
 private:
     void initUi();
-    DLabel *tipLabel;
-    QWidget *centerWindow;
-    DSuggestButton *cancelButton;
-    QLineEdit *lineEdit;
+    DLabel *m_tipLabel;
+    DWidget *m_centerWindow;
+    DSuggestButton *m_cancelButton;
+    QLineEdit *m_lineEdit;
     QString m_verCode;
-    QTimer *timer;
+    QTimer *m_timer;
     void connectSuc();
     void connectFaild();
 

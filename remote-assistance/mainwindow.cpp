@@ -14,7 +14,7 @@
 #include <DButtonBox>
 #include <DThemeManager>
 
-MainWindow::MainWindow(QWidget *parent)
+MainWindow::MainWindow(DWidget *parent)
     : DMainWindow(parent)
 {
     initUi();
@@ -22,28 +22,28 @@ MainWindow::MainWindow(QWidget *parent)
 
 void MainWindow::showRecourseWindow()
 {
-    rw = new recourseWindow(this);
-    rw->setMinimumSize(360, 320);
+    m_rw = new recourseWindow(this);
+    m_rw->setMinimumSize(360, 320);
     //Dtk::Widget::moveToCenter(rw);
-    rw->move(x(), y());
-    m_verCode = rw->getVerCode();
+    m_rw->move(x(), y());
+    m_verCode = m_rw->getVerCode();
     //12-25
     this->hide();
-    rw->setFixedSize(360, 320);
-    rw->show();
+    m_rw->setFixedSize(360, 320);
+    m_rw->show();
 }
 
 void MainWindow::showAssistWindow()
 {
-    aw = new assistWindow(this);
-    aw->setMinimumSize(360, 320);
+    m_aw = new assistWindow(this);
+    m_aw->setMinimumSize(360, 320);
     //Dtk::Widget::moveToCenter(aw);
-    aw->move(x(), y());
-    aw->setVerCode(m_verCode);
+    m_aw->move(x(), y());
+    m_aw->setVerCode(m_verCode);
     //12-25
     this->hide();
-    aw->setFixedSize(360, 320);
-    aw->show();
+    m_aw->setFixedSize(360, 320);
+    m_aw->show();
 }
 
 
@@ -60,7 +60,7 @@ void MainWindow::initUi()
     this->setAutoFillBackground(true);
     this->setPalette(pal);
 
-    QWidget *titleWidget = new QWidget();
+    DWidget *titleWidget = new DWidget();
     DLabel *titleLabel = new DLabel(titleWidget);
     titleLabel->setText("远程协助");
     QFont titleFont("Courier", 11);
@@ -77,21 +77,21 @@ void MainWindow::initUi()
     titlebar()->setCustomWidget(titleWidget);
     titlebar()->setStyleSheet("background-color: #F5F5F8;");
 
-    centerWindow = new QWidget();
-    setCentralWidget(centerWindow);
+    m_centerWindow = new DWidget();
+    setCentralWidget(m_centerWindow);
 
     DLabel *titleIcon = new DLabel(this);
     titleIcon->setPixmap(DHiDPIHelper::loadNxPixmap(":/images/tower.png"));
 
-    tipLabel = new DLabel(this);
-    tipLabel->setText("这是由deppin团队开发的远程协助应用，如果您在使""\n"
-                      "用过程中遇到了困难，或者有人求助于你，请点击下""\n"
-                      "      　　　方的我要求助和帮助别人。");
+    m_tipLabel = new DLabel(this);
+    m_tipLabel->setText("这是由deppin团队开发的远程协助应用，如果您在使""\n"
+                        "用过程中遇到了困难，或者有人求助于你，请点击下""\n"
+                        "      　　　方的我要求助和帮助别人。");
     QFont font("Courier", 8);
-    tipLabel->setFont(font);
+    m_tipLabel->setFont(font);
     QPalette pe;
     pe.setColor(QPalette::WindowText, Qt::gray);
-    tipLabel->setPalette(pe);
+    m_tipLabel->setPalette(pe);
 
     QPixmap pixHand(":/images/hand.png");
     QImage imagHand = ConvertImageToTransparent(pixHand);
@@ -105,12 +105,12 @@ void MainWindow::initUi()
     hlayoutRb->addWidget(recButtonRbText);
     hlayoutRb->addStretch();
 
-    recourseButton = new DPushButton(this);
-    recourseButton->setBackgroundRole(QPalette::Button);
-    recourseButton->setFixedSize(QSize(165, 35));
-    recourseButton->setIconSize(QSize(50, 50));
-    recourseButton->setLayout(hlayoutRb);
-    connect(recourseButton, SIGNAL(clicked(bool)), this,  SLOT(showRecourseWindow()));
+    m_recourseButton = new DPushButton(this);
+    m_recourseButton->setBackgroundRole(QPalette::Button);
+    m_recourseButton->setFixedSize(QSize(165, 35));
+    m_recourseButton->setIconSize(QSize(50, 50));
+    m_recourseButton->setLayout(hlayoutRb);
+    connect(m_recourseButton, SIGNAL(clicked(bool)), this,  SLOT(showRecourseWindow()));
 
 
     QPixmap pixHeart(":/images/heart.png");
@@ -125,22 +125,22 @@ void MainWindow::initUi()
     hlayoutAb->addWidget(hlayoutAbTest);
     hlayoutAb->addStretch();
 
-    assistButton = new DPushButton(this);
-    assistButton->setIconSize(QSize(50, 40));
-    assistButton->setFixedSize(QSize(165, 35));
-    assistButton->setBackgroundRole(QPalette::Button);
-    assistButton->setLayout(hlayoutAb);
-    connect(assistButton, SIGNAL(clicked(bool)), this,  SLOT(showAssistWindow()));
+    m_assistButton = new DPushButton(this);
+    m_assistButton->setIconSize(QSize(50, 40));
+    m_assistButton->setFixedSize(QSize(165, 35));
+    m_assistButton->setBackgroundRole(QPalette::Button);
+    m_assistButton->setLayout(hlayoutAb);
+    connect(m_assistButton, SIGNAL(clicked(bool)), this,  SLOT(showAssistWindow()));
 
     QVBoxLayout *vlayout = new QVBoxLayout(this);
     vlayout->setSpacing(10);
     vlayout->addStretch();
     vlayout->addWidget(titleIcon, 0, Qt::AlignCenter);
-    vlayout->addWidget(tipLabel, 0, Qt::AlignCenter);
-    vlayout->addWidget(recourseButton, 0, Qt::AlignCenter);
-    vlayout->addWidget(assistButton, 0,  Qt::AlignCenter);
+    vlayout->addWidget(m_tipLabel, 0, Qt::AlignCenter);
+    vlayout->addWidget(m_recourseButton, 0, Qt::AlignCenter);
+    vlayout->addWidget(m_assistButton, 0,  Qt::AlignCenter);
     vlayout->addStretch();
-    centerWindow->setLayout(vlayout);
+    m_centerWindow->setLayout(vlayout);
 }
 
 QImage MainWindow::ConvertImageToTransparent(QPixmap qPixmap)

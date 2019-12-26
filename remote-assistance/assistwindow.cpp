@@ -36,10 +36,10 @@ void assistWindow::setVerCode(QString verCode)
 void assistWindow::initUi()
 {
     this->setWindowFlag(Qt::WindowMaximizeButtonHint, false);
-    centerWindow = new QWidget();
-    setCentralWidget(centerWindow);
+    m_centerWindow = new DWidget();
+    setCentralWidget(m_centerWindow);
 
-    QWidget *titleWidget = new QWidget();
+    DWidget *titleWidget = new DWidget();
     DLabel *titleBarIcon = new DLabel(titleWidget);
     titleBarIcon->setFixedSize(25, 25);
     titleBarIcon->setPixmap(DHiDPIHelper::loadNxPixmap(":/images/heartSec.png").scaled(titleBarIcon->width(),
@@ -63,32 +63,32 @@ void assistWindow::initUi()
     titlebar()->setCustomWidget(titleWidget);
     titlebar()->setStyleSheet("background-color: #F5F5F8;");
 
-    lineEdit = new QLineEdit(this);
-    lineEdit->setFixedSize(330, 80);
+    m_lineEdit = new QLineEdit(this);
+    m_lineEdit->setFixedSize(330, 80);
     QFont lineEditFont("Courier", 40);
-    lineEdit->setFont(lineEditFont);
-    lineEdit->setAlignment(Qt::AlignCenter);
+    m_lineEdit->setFont(lineEditFont);
+    m_lineEdit->setAlignment(Qt::AlignCenter);
 
-    connect(lineEdit, SIGNAL(textChanged(const QString &)), this, SLOT(setCompleter(const QString &)));
+    connect(m_lineEdit, SIGNAL(textChanged(const QString &)), this, SLOT(setCompleter(const QString &)));
 
-    tipLabel = new DLabel(this);
-    tipLabel->setText("请在上方输入你想帮助的人提供给你的验证码，完成后点击连接开始""\n"
-                      "                      ""协助对方");
+    m_tipLabel = new DLabel(this);
+    m_tipLabel->setText("请在上方输入你想帮助的人提供给你的验证码，完成后点击连接开始""\n"
+                        "                      ""协助对方");
     QFont tip_font("Courier", 8);
-    tipLabel->setFixedWidth(330);
-    tipLabel->setWordWrap(true);
-    tipLabel->setAlignment(Qt::AlignTop);
-    tipLabel->adjustSize();
-    tipLabel->setFont(tip_font);
+    m_tipLabel->setFixedWidth(330);
+    m_tipLabel->setWordWrap(true);
+    m_tipLabel->setAlignment(Qt::AlignTop);
+    m_tipLabel->adjustSize();
+    m_tipLabel->setFont(tip_font);
     QPalette pe;
     pe.setColor(QPalette::WindowText, Qt::gray);
-    tipLabel->setPalette(pe);
+    m_tipLabel->setPalette(pe);
 
-    cancelButton = new DSuggestButton(this);
-    cancelButton->setBackgroundRole(QPalette::Button);
-    cancelButton->setText("取消");
-    cancelButton->setFixedSize(QSize(190, 40));
-    connect(cancelButton, &DPushButton::clicked, this, &assistWindow::changeWindow);
+    m_cancelButton = new DSuggestButton(this);
+    m_cancelButton->setBackgroundRole(QPalette::Button);
+    m_cancelButton->setText("取消");
+    m_cancelButton->setFixedSize(QSize(190, 40));
+    connect(m_cancelButton, &DPushButton::clicked, this, &assistWindow::changeWindow);
 //    connect(cancelButton, &DPushButton::clicked, this, [ = ] {
 //        this->close();
 //   });
@@ -102,26 +102,26 @@ void assistWindow::initUi()
     vlayout->addStretch();
     vlayout->setContentsMargins(0, 30, 0, 30);
     vlayout->setSpacing(30);
-    vlayout->addWidget(lineEdit, 0, Qt::AlignCenter);
-    vlayout->addWidget(tipLabel, 0, Qt::AlignCenter);
-    vlayout->addWidget(cancelButton, 0, Qt::AlignCenter);
+    vlayout->addWidget(m_lineEdit, 0, Qt::AlignCenter);
+    vlayout->addWidget(m_tipLabel, 0, Qt::AlignCenter);
+    vlayout->addWidget(m_cancelButton, 0, Qt::AlignCenter);
     vlayout->addStretch();
-    centerWindow->setLayout(vlayout);
+    m_centerWindow->setLayout(vlayout);
 }
 
 void assistWindow::connectSuc()
 {
     this->setWindowFlag(Qt::WindowMaximizeButtonHint, false);
     this->setWindowTitle(QString("我要求助"));
-    centerWindow = new QWidget();
-    setCentralWidget(centerWindow);
+    m_centerWindow = new DWidget();
+    setCentralWidget(m_centerWindow);
 
-    tipLabel = new DLabel(this);
-    tipLabel->setText("您正在进行远程协助");
+    m_tipLabel = new DLabel(this);
+    m_tipLabel->setText("您正在进行远程协助");
     QFont tip_font1("Courier", 16);
     //tipLabel->setFixedWidth(300);
     tip_font1.setLetterSpacing(QFont::PercentageSpacing, 120);
-    tipLabel->setFont(tip_font1);
+    m_tipLabel->setFont(tip_font1);
 
     DLabel *tipLabel1 = new DLabel(this);
     tipLabel1->setText("  当前已有一个连接会话，如果您想建立新的连接，请先断开");
@@ -132,44 +132,44 @@ void assistWindow::connectSuc()
     pal.setColor(QPalette::WindowText, Qt::gray);
     tipLabel1->setPalette(pal);
 
-    cancelButton = new DSuggestButton(this);
-    cancelButton->setBackgroundRole(QPalette::Button);
-    cancelButton->setText("断开");
-    cancelButton->setFixedSize(QSize(190, 40));
+    m_cancelButton = new DSuggestButton(this);
+    m_cancelButton->setBackgroundRole(QPalette::Button);
+    m_cancelButton->setText("断开");
+    m_cancelButton->setFixedSize(QSize(190, 40));
     //12-25
 //    connect(cancelButton, &DPushButton::clicked, this, [ = ] {
 //        this->close();
 //    });
-    connect(cancelButton, &DPushButton::clicked, this, &assistWindow::changeWindow);
+    connect(m_cancelButton, &DPushButton::clicked, this, &assistWindow::changeWindow);
 
     QVBoxLayout *vlayout = new QVBoxLayout(this);
     vlayout->setContentsMargins(0, 30, 0, 30);
     vlayout->setSpacing(15);
-    vlayout->addWidget(tipLabel, 0, Qt::AlignCenter);
+    vlayout->addWidget(m_tipLabel, 0, Qt::AlignCenter);
     vlayout->addWidget(tipLabel1, 0, Qt::AlignCenter);
-    vlayout->addWidget(cancelButton, 0, Qt::AlignCenter);
-    centerWindow->setLayout(vlayout);
+    vlayout->addWidget(m_cancelButton, 0, Qt::AlignCenter);
+    m_centerWindow->setLayout(vlayout);
 }
 
 void assistWindow::connectFaild()
 {
     this->setWindowFlag(Qt::WindowMaximizeButtonHint, false);
     this->setWindowTitle(QString("我要求助"));
-    centerWindow = new QWidget();
-    setCentralWidget(centerWindow);
+    m_centerWindow = new DWidget();
+    setCentralWidget(m_centerWindow);
 
-    tipLabel = new DLabel(this);
-    tipLabel->setText("连接失败");
+    m_tipLabel = new DLabel(this);
+    m_tipLabel->setText("连接失败");
     QFont tip_font1("Courier", 20);
     //tipLabel->setFixedSize(300,60);
     tip_font1.setLetterSpacing(QFont::PercentageSpacing, 120);
-    tipLabel->setWordWrap(true);
-    tipLabel->setAlignment(Qt::AlignTop);
-    tipLabel->adjustSize();
-    tipLabel->setFont(tip_font1);
+    m_tipLabel->setWordWrap(true);
+    m_tipLabel->setAlignment(Qt::AlignTop);
+    m_tipLabel->adjustSize();
+    m_tipLabel->setFont(tip_font1);
     QPalette pe;
     pe.setColor(QPalette::WindowText, QColor("#FC952E"));
-    tipLabel->setPalette(pe);
+    m_tipLabel->setPalette(pe);
 
     DLabel *tipLabel1 = new DLabel(this);
     tipLabel1->setText("网络连接状态不是很稳定，点击重试按钮再次尝试连接");
@@ -180,34 +180,34 @@ void assistWindow::connectFaild()
     pal.setColor(QPalette::WindowText, Qt::gray);
     tipLabel1->setPalette(pal);
 
-    cancelButton = new DSuggestButton(this);
-    cancelButton->setBackgroundRole(QPalette::Button);
-    cancelButton->setText("重试");
-    cancelButton->setFixedSize(QSize(190, 40));
-    connect(cancelButton, &DPushButton::clicked, this, &assistWindow::initUi);
+    m_cancelButton = new DSuggestButton(this);
+    m_cancelButton->setBackgroundRole(QPalette::Button);
+    m_cancelButton->setText("重试");
+    m_cancelButton->setFixedSize(QSize(190, 40));
+    connect(m_cancelButton, &DPushButton::clicked, this, &assistWindow::initUi);
 
     QVBoxLayout *vlayout = new QVBoxLayout(this);
     vlayout->setContentsMargins(0, 30, 0, 30);
     vlayout->setSpacing(15);
-    vlayout->addWidget(tipLabel, 0, Qt::AlignCenter | Qt::AlignCenter);
+    vlayout->addWidget(m_tipLabel, 0, Qt::AlignCenter | Qt::AlignCenter);
     vlayout->addWidget(tipLabel1, 0, Qt::AlignCenter | Qt::AlignCenter);
-    vlayout->addWidget(cancelButton, 0, Qt::AlignCenter | Qt::AlignCenter);
-    centerWindow->setLayout(vlayout);
+    vlayout->addWidget(m_cancelButton, 0, Qt::AlignCenter | Qt::AlignCenter);
+    m_centerWindow->setLayout(vlayout);
 }
 
 void assistWindow::changeButtonState()
 {
-    disconnect(cancelButton, &DPushButton::clicked, this, &assistWindow::changeWindow);
-    cancelButton->setText("连接");
-    connect(cancelButton, SIGNAL(clicked(bool)), this,  SLOT(connection()));
+    disconnect(m_cancelButton, &DPushButton::clicked, this, &assistWindow::changeWindow);
+    m_cancelButton->setText("连接");
+    connect(m_cancelButton, SIGNAL(clicked(bool)), this,  SLOT(connection()));
 }
 
 void assistWindow::changeButtonStateToCancle()
 {
-    if (cancelButton->text() == "连接") {
-        disconnect(cancelButton, SIGNAL(clicked(bool)), this,  SLOT(connection()));
-        cancelButton->setText("取消");
-        connect(cancelButton, &DPushButton::clicked, this, &assistWindow::changeWindow);
+    if (m_cancelButton->text() == "连接") {
+        disconnect(m_cancelButton, SIGNAL(clicked(bool)), this,  SLOT(connection()));
+        m_cancelButton->setText("取消");
+        connect(m_cancelButton, &DPushButton::clicked, this, &assistWindow::changeWindow);
     }
 
 }
@@ -216,27 +216,27 @@ void assistWindow::connection()
 {
     this->setWindowFlag(Qt::WindowMaximizeButtonHint, false);
     this->setWindowTitle(QString("我要求助"));
-    centerWindow = new QWidget();
-    setCentralWidget(centerWindow);
+    m_centerWindow = new DWidget();
+    setCentralWidget(m_centerWindow);
 
     DSpinner *spinner = new DSpinner();
     spinner->start();
     spinner->setFixedSize(QSize(50, 50));
 
-    tipLabel = new DLabel(this);
-    tipLabel->setText("正在建立连接，请稍后...");
+    m_tipLabel = new DLabel(this);
+    m_tipLabel->setText("正在建立连接，请稍后...");
     QFont font("Courier", 10);
-    tipLabel->setFont(font);
+    m_tipLabel->setFont(font);
 
-    cancelButton = new DSuggestButton(this);
-    cancelButton->setBackgroundRole(QPalette::Button);
-    cancelButton->setText("取消");
-    cancelButton->setFixedSize(QSize(190, 40));
+    m_cancelButton = new DSuggestButton(this);
+    m_cancelButton->setBackgroundRole(QPalette::Button);
+    m_cancelButton->setText("取消");
+    m_cancelButton->setFixedSize(QSize(190, 40));
 //    connect(cancelButton, &DPushButton::clicked, this, [ = ] {
 //        this->close();
 //    });
 
-    connect(cancelButton, &QPushButton::clicked, this, [ = ] {
+    connect(m_cancelButton, &QPushButton::clicked, this, [ = ] {
         emit isCancle();
         // 显示父窗体
         assistWindow::initUi();
@@ -246,21 +246,21 @@ void assistWindow::connection()
     vlayout->setContentsMargins(0, 30, 0, 30);
     vlayout->setSpacing(15);
     vlayout->addWidget(spinner, 0, Qt::AlignCenter);
-    vlayout->addWidget(tipLabel, 0, Qt::AlignCenter);
-    vlayout->addWidget(cancelButton, 0, Qt::AlignCenter);
-    centerWindow->setLayout(vlayout);
+    vlayout->addWidget(m_tipLabel, 0, Qt::AlignCenter);
+    vlayout->addWidget(m_cancelButton, 0, Qt::AlignCenter);
+    m_centerWindow->setLayout(vlayout);
 
 
-    timer = new QTimer(this);
+    m_timer = new QTimer(this);
     // 设置5秒时间等待
-    timer->setInterval(5 * 1000);
+    m_timer->setInterval(5 * 1000);
     //timer->setSingleShot(false);
-    timer->start();
+    m_timer->start();
     connect(this, &assistWindow::isCancle, this, [ = ] {
-        timer->stop();
+        m_timer->stop();
     });
-    const QString editText = lineEdit->text();
-    connect(timer, &QTimer::timeout, this, [ = ] {
+    const QString editText = m_lineEdit->text();
+    connect(m_timer, &QTimer::timeout, this, [ = ] {
         changeWindowState(editText);
     });
     // 设置5秒的等待
@@ -314,7 +314,7 @@ void assistWindow::setCompleter(const QString &str)
 
 void assistWindow::changeWindow()
 {
-    QWidget::close();
+    DWidget::close();
     // 显示父窗体
     parentWidget()->move(x(), y());
     parentWidget()->show();
@@ -322,7 +322,7 @@ void assistWindow::changeWindow()
 
 void assistWindow::changeWindowState(const QString &str)
 {
-    timer->stop();
+    m_timer->stop();
     if (m_verCode == str) {
         connectSuc();
     } else {

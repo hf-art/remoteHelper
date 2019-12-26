@@ -17,18 +17,18 @@ class MainWindow : public DMainWindow
 {
     Q_OBJECT
 public:
-    MainWindow(QWidget *parent = nullptr);
+    MainWindow(DWidget *parent = nullptr);
     ~MainWindow();
 
     QImage ConvertImageToTransparent(QPixmap qPixmap);
 private:
     void initUi();
-    DLabel *tipLabel;
-    QWidget *centerWindow;
-    DPushButton *recourseButton;
-    DPushButton *assistButton;
-    recourseWindow *rw;
-    assistWindow *aw;
+    DLabel *m_tipLabel;
+    DWidget *m_centerWindow;
+    DPushButton *m_recourseButton;
+    DPushButton *m_assistButton;
+    recourseWindow *m_rw;
+    assistWindow *m_aw;
     QString m_verCode;
 
 public slots:
