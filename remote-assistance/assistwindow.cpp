@@ -86,7 +86,7 @@ void assistWindow::initUi()
 
     m_cancelButton = new DSuggestButton(this);
     m_cancelButton->setBackgroundRole(QPalette::Button);
-    m_cancelButton->setText("取消");
+    m_cancelButton->setText("取 消");
     m_cancelButton->setFixedSize(QSize(190, 40));
     connect(m_cancelButton, &DPushButton::clicked, this, &assistWindow::changeWindow);
 //    connect(cancelButton, &DPushButton::clicked, this, [ = ] {
@@ -134,7 +134,7 @@ void assistWindow::connectSuc()
 
     m_cancelButton = new DSuggestButton(this);
     m_cancelButton->setBackgroundRole(QPalette::Button);
-    m_cancelButton->setText("断开");
+    m_cancelButton->setText("断 开");
     m_cancelButton->setFixedSize(QSize(190, 40));
     //12-25
 //    connect(cancelButton, &DPushButton::clicked, this, [ = ] {
@@ -182,7 +182,7 @@ void assistWindow::connectFaild()
 
     m_cancelButton = new DSuggestButton(this);
     m_cancelButton->setBackgroundRole(QPalette::Button);
-    m_cancelButton->setText("重试");
+    m_cancelButton->setText("重 试");
     m_cancelButton->setFixedSize(QSize(190, 40));
     connect(m_cancelButton, &DPushButton::clicked, this, &assistWindow::initUi);
 
@@ -198,15 +198,15 @@ void assistWindow::connectFaild()
 void assistWindow::changeButtonState()
 {
     disconnect(m_cancelButton, &DPushButton::clicked, this, &assistWindow::changeWindow);
-    m_cancelButton->setText("连接");
+    m_cancelButton->setText("连 接");
     connect(m_cancelButton, SIGNAL(clicked(bool)), this,  SLOT(connection()));
 }
 
 void assistWindow::changeButtonStateToCancle()
 {
-    if (m_cancelButton->text() == "连接") {
+    if (m_cancelButton->text() == "连 接") {
         disconnect(m_cancelButton, SIGNAL(clicked(bool)), this,  SLOT(connection()));
-        m_cancelButton->setText("取消");
+        m_cancelButton->setText("取 消");
         connect(m_cancelButton, &DPushButton::clicked, this, &assistWindow::changeWindow);
     }
 
@@ -230,7 +230,7 @@ void assistWindow::connection()
 
     m_cancelButton = new DSuggestButton(this);
     m_cancelButton->setBackgroundRole(QPalette::Button);
-    m_cancelButton->setText("取消");
+    m_cancelButton->setText("取 消");
     m_cancelButton->setFixedSize(QSize(190, 40));
 //    connect(cancelButton, &DPushButton::clicked, this, [ = ] {
 //        this->close();
@@ -274,13 +274,13 @@ bool assistWindow::isVerCodeValid(const QString &str)
     int length = str.length();
     for (int i = 0; i < length; i++) {
         if (str[i] < '0' || str[i] > '9') {
-            QMessageBox::warning(nullptr, "warning", "校验码输入非法，请输入6位0~9之间的数字！");
+            QMessageBox::warning(nullptr, "提　示", "校验码输入非法，请输入6位'0~9'之间的数字！");
             return false;
         }
     }
 
     if (length > 6) {
-        QMessageBox::warning(nullptr, "warning", "校验码不能大于6位");
+        QMessageBox::warning(this, "提　示", "校验码不能大于6位");
         return false;
     } else if (length == 6) {
         return true;
@@ -296,12 +296,12 @@ void assistWindow::setCompleter(const QString &str)
     }
 
     if (length > 6) {
-        QMessageBox::warning(nullptr, "warning", "校验码不能大于6位");
+        QMessageBox::warning(this, "提　示", "校验码不能大于6位");
         return;
     } else {
         for (int i = 0; i < length; i++) {
             if (str[i] < '0' || str[i] > '9') {
-                QMessageBox::warning(nullptr, "warning", "校验码输入非法，请输入6位0~9之间的数字！");
+                QMessageBox::warning(this, "提　示", "校验码输入非法，请输入6位'0~9'之间的数字！");
                 return;
             }
         }

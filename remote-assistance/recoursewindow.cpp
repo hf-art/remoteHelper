@@ -88,7 +88,7 @@ void recourseWindow::initUi()
     m_tipLabel->setFont(font);
 
     m_cancelButton = new DSuggestButton(this);
-    m_cancelButton->setText("取消");
+    m_cancelButton->setText("取 消");
     m_cancelButton->setFixedSize(QSize(190, 40));
     connect(m_cancelButton, &QPushButton::clicked, this, [ = ] {
         DWidget::close();
@@ -146,7 +146,7 @@ void recourseWindow::geneVerCodeUi()
 
     m_copyButton = new DSuggestButton(this);
     m_copyButton->setBackgroundRole(QPalette::Button);
-    m_copyButton->setText("复制");
+    m_copyButton->setText("复 制");
     m_copyButton->setFixedSize(QSize(190, 40));
 
     QPalette pal(this->palette());
@@ -209,7 +209,7 @@ void recourseWindow::copyVerCodeUi()
 
     m_copyButton = new DSuggestButton(this);
     m_copyButton->setBackgroundRole(QPalette::Button);
-    m_copyButton->setText("返回");
+    m_copyButton->setText("返 回");
     m_copyButton->setFixedSize(QSize(190, 40));
     connect(m_copyButton, &QPushButton::clicked, this, [ = ] {
         DWidget::close();
